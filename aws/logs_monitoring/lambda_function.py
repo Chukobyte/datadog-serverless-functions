@@ -199,7 +199,7 @@ def generate_logs(event, context, metadata):
         elif event_type == "sns":
             logs = sns_handler(event, metadata)
         elif event_type == "kinesis":
-            logs = kinesis_handler(event)
+            logs = kinesis_handler(event, metadata)
     except Exception as e:
         # Logs through the socket the error
         err_message = "Error parsing the object. Exception: {} for event {}".format(
@@ -364,7 +364,7 @@ def sns_handler(event, metadata):
         yield structured_line
 
 # Handle kinesis stream events
-def kinesis_handler(event):
+def kinesis_handler(event, metadata):
     kinesis = boto3.client("kinesis")
     event_records = event["Records"][0]
     kinesis_record = event_records["kinesis"]
